@@ -13,12 +13,9 @@ void EventBus::triggerEvent(Event* event) {
 }
 
 void EventBus::_triggerEvent(Event* event) {
-  EventType type = event->getType();
-  if(type<0 || type>=EVENT_COUNT){
-    error("EventBus", "Invalid service type %d", type);
-    throw std::invalid_argument("Invalid service type");
-  }
-  newEvents[type].push_back(event);
+  std::string &type = event->getType();
+  auto &events = newEvents[type];
+  events.push_back(event);
 }
 
 /**
@@ -34,27 +31,26 @@ EventBus* EventBus::getInstance() {
 }
 
 /**
- * @brief 分发事件。因为 Luban 运行机制，无法真正实时派送事件，此处只是借用概念，实际动作是清除已分发事件列表，并将新事件转移至待派送列表中。
+ * @brief 分发事件。因为 Ticos 可视化编程语言的运行机制，无法真正实时派送事件，此处只是借用概念，实际动作是清除已分发事件列表，并将新事件转移至待派送列表中。
  * 此方法应在每轮主循环中调用
  */
 void EventBus::dispatchEvent() {
   // Clear the dispatchedEvents list
-  int i = 0;
-  for(; i < EVENT_COUNT; i++) {
-    while(dispatchedEvents[i].size() > 0){
-      debug("EventBus", "type %d event %d\n",i , dispatchedEvents[i].size());
-      Event* event = dispatchedEvents[i].front();
-      dispatchedEvents[i].pop_front();
+  for (std::map<std::string, std::list<Event*>>::iterator it=dispatchedEvents.begin(); it!=dispatchedEvents.end(); ++it) {
+    while(it->second.size() > 0){
+      debug("EventBus", "type %s event %d\n",it->first , it->second.size());
+      Event* event = it->second.front();
+      it->second.pop_front();
       delete event;
     }
   }
 
   // Move the first event from newEvents to dispatchedEvents in each type
-  for(i = 0; i < EVENT_COUNT; i++) {
-    if(newEvents[i].size() > 0){
-      debug("EventBus", "type %d event %d\n",i , newEvents[i].size());
-      dispatchedEvents[i].push_back(newEvents[i].front());
-      newEvents[i].pop_front();
+  for (std::map<std::string, std::list<Event*>>::iterator it=newEvents.begin(); it!=newEvents.end(); ++it) {
+    if(it->second.size() > 0){
+      debug("EventBus", "type %s event %d\n",it->first , it->second.size());
+      dispatchedEvents[it->first].push_back(it->second.front());
+      it->second.pop_front();
     }
   }
 }
@@ -65,7 +61,7 @@ void EventBus::dispatchEvent() {
  * @param type: 希望获得的事件所属的类型
  * @return 指定类型中的下一个事件
  */
-Event* EventBus::receiveEvent(EventType type) {
+Event* EventBus::receiveEvent(std::string type) {
   if(!initialized) {
     error("EventBus", "\tNo EventBus in the application! Please add one into the project!");
     throw std::invalid_argument("\tNo EventBus in the application!");

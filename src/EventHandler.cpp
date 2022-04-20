@@ -1,7 +1,7 @@
 #include "EventHandler.h"
 #include "EventBus.h"
 
-EventHandler::EventHandler(EventType type) {
+EventHandler::EventHandler(std::string type) {
   this->type = type;
 }
 

@@ -7,10 +7,10 @@
  */
 class EventHandler {
 public:
-  EventHandler(EventType type);
+  EventHandler(std::string type);
   Event* receiveEvent();
 
 private:
-  EventType type;
+  std::string type;
 };
 #endif // EventHandler_h

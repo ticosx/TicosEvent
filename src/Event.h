@@ -1,31 +1,25 @@
 #ifndef Event_h
 #define Event_h
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <string>
+using namespace std;
 
-typedef enum {
-    KEY_EVENT = 0,
-    MOD_EVENT,
-    EVENT_COUNT
-} EventType;
+#define MAX_TYPE_LENGTH 16
 
-#ifdef __cplusplus
-}
-#endif
+#define EVT_MODULE  "MOD"
+#define EVT_KEY     "KEY"
 /*!
  * @brief 事件类
  */
 class Event {
 public:
-  Event(EventType type, void* data);
-  EventType getType();
-  void* getData();
+  Event(std::string type, long data);
+  std::string &getType();
+  long getData();
 
 protected:
 
-  EventType type;
-  void* data;
+  std::string type;
+  long data = 0;
 };
 #endif // Event_h

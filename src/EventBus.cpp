@@ -38,7 +38,7 @@ void EventBus::dispatchEvent() {
   // Clear the dispatchedEvents list
   for (std::map<std::string, std::list<Event*>>::iterator it=dispatchedEvents.begin(); it!=dispatchedEvents.end(); ++it) {
     while(it->second.size() > 0){
-      debug("EventBus", "type %s event %d\n",it->first , it->second.size());
+      logDebug("type %s event %d\n",it->first , it->second.size());
       Event* event = it->second.front();
       it->second.pop_front();
       delete event;
@@ -48,7 +48,7 @@ void EventBus::dispatchEvent() {
   // Move the first event from newEvents to dispatchedEvents in each type
   for (std::map<std::string, std::list<Event*>>::iterator it=newEvents.begin(); it!=newEvents.end(); ++it) {
     if(it->second.size() > 0){
-      debug("EventBus", "type %s event %d\n",it->first , it->second.size());
+      logDebug("type %s event %d\n",it->first , it->second.size());
       dispatchedEvents[it->first].push_back(it->second.front());
       it->second.pop_front();
     }
@@ -63,7 +63,7 @@ void EventBus::dispatchEvent() {
  */
 Event* EventBus::receiveEvent(std::string type) {
   if(!initialized) {
-    error("EventBus", "\tNo EventBus in the application! Please add one into the project!");
+    logErr("\tNo EventBus in the application! Please add one into the project!");
     throw std::invalid_argument("\tNo EventBus in the application!");
   }
   if(dispatchedEvents[type].size() > 0){

@@ -10,7 +10,7 @@
  */
 Event::Event(std::string type, long data) {
   if(type.size() >= MAX_TYPE_LENGTH){
-    error("Event", "Event type's length must be less than %d", MAX_TYPE_LENGTH);
+    logErr("Event type's length must be less than %d", MAX_TYPE_LENGTH);
     throw std::invalid_argument("Event type's length too long");
   }
   this->type = type;

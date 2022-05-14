@@ -38,7 +38,7 @@ void EventBus::dispatchEvent() {
   // Clear the dispatchedEvents list
   for (std::map<std::string, std::list<Event*>>::iterator it=dispatchedEvents.begin(); it!=dispatchedEvents.end(); ++it) {
     while(it->second.size() > 0){
-      logDebug("type %s event %d\n",it->first , it->second.size());
+      logVerbose("Clear dispatched %d events in type %s \n", it->second.size(), it->first.c_str());
       Event* event = it->second.front();
       it->second.pop_front();
       delete event;
@@ -48,7 +48,7 @@ void EventBus::dispatchEvent() {
   // Move the first event from newEvents to dispatchedEvents in each type
   for (std::map<std::string, std::list<Event*>>::iterator it=newEvents.begin(); it!=newEvents.end(); ++it) {
     if(it->second.size() > 0){
-      logDebug("type %s event %d\n",it->first , it->second.size());
+      logVerbose("Next round dispatch %d events in type %s \n", it->second.size(), it->first.c_str());
       dispatchedEvents[it->first].push_back(it->second.front());
       it->second.pop_front();
     }

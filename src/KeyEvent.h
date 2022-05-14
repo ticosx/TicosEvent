@@ -19,6 +19,8 @@ typedef enum {
 #ifdef __cplusplus
 }
 #endif
+
+#define NO_KEY  0
 /*!
  * @brief 事件类
  */

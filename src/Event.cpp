@@ -4,7 +4,7 @@
 #include "Log.h"
 
 /*!
- *    @brief  创建一个事件
+ *    @brief  创建一个事件。需要提交给 EventBus 分发的事件应该采用 new 方式创建，EventBus 分发后负责销毁
  *    @param  type 事件类型。长度最大为 16
  *    @param  data 事件包含的数据
  */

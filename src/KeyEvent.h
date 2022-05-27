@@ -27,6 +27,7 @@ typedef enum {
 class KeyEvent : public Event {
 public:
   KeyEvent(uint16_t keyCode, KeyState state);
+  virtual ~KeyEvent() {};
   uint16_t getKey();
   KeyState getState();
 

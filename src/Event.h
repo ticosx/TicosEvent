@@ -8,12 +8,14 @@ using namespace std;
 
 #define EVT_MODULE  "MOD"
 #define EVT_KEY     "KEY"
+#define EVT_LVGL     "LVGL"
 /*!
  * @brief 事件类
  */
 class Event {
 public:
   Event(std::string type, long data);
+  virtual ~Event() {};
   std::string &getType();
   long getData();
 
